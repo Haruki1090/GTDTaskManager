@@ -3,6 +3,8 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gtd_task_manager/services/firebase_initializer.dart';
 import 'package:gtd_task_manager/viewmodels/auth_viewmodel.dart';
+import 'package:gtd_task_manager/views/home_screen.dart';
+import 'package:gtd_task_manager/views/login_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,25 +22,24 @@ class MyApp extends ConsumerWidget {
     final authStateChanges = ref.watch(authStateProvider);
 
     return MaterialApp(
-      title: 'GTD Task Manager',
-      theme: ThemeData.light(),
-      darkTheme: ThemeData.dark(),
-      themeMode: ThemeMode.system, // デバイスのテーマに合わせる
-      home: authStateChanges.when(
-        data: (user) {
-          if (user != null) {
-            return const HomeScreen();
-          } else {
-            return const LoginScreen();
-          }
-        },
-        loading: () => const Scaffold(
-          body: Center(child: CircularProgressIndicator()),
-        ),
-        error: (error, stack) => Scaffold(
-          body: Center(child: Text('Error: $error')),
-        )
-      );
-    );
+        title: 'GTD Task Manager',
+        theme: ThemeData.light(),
+        darkTheme: ThemeData.dark(),
+        themeMode: ThemeMode.system, // デバイスのテーマに合わせる
+        home: authStateChanges.when(
+            data: (user) {
+              if (user != null) {
+                final String uid = user.uid;
+                return HomeScreen(uid: uid);
+              } else {
+                return const LoginScreen();
+              }
+            },
+            loading: () => const Scaffold(
+                  body: Center(child: CircularProgressIndicator()),
+                ),
+            error: (error, stack) => Scaffold(
+                  body: Center(child: Text('Error: $error')),
+                )));
   }
 }
