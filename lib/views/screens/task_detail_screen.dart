@@ -10,7 +10,6 @@ class TaskDetailScreen extends ConsumerStatefulWidget {
 }
 
 class _TaskDetailScreenState extends ConsumerState<TaskDetailScreen> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,3 +21,4 @@ class _TaskDetailScreenState extends ConsumerState<TaskDetailScreen> {
       ),
     );
   }
+}
