@@ -110,14 +110,17 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       if (_isLogin) {
         await authViewModel.signInWithEmail(email, password);
       } else {
-        await authViewModel.registerWithEmail(email, password);
+        await authViewModel.registerWithEmail(
+          email: email,
+          password: password,
+          username: email.split('@').first,
+        );
       }
     } catch (e) {
       _showErrorDialog("ログインに失敗しました。\n${e.toString()}");
     }
   }
 
-  @override
   void _signInWithGoogle() async {
     final authViewModel = ref.read(authViewModelProvider);
     try {
