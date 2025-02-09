@@ -6,8 +6,7 @@ import 'package:gtd_task_manager/services/notion_service.dart';
 import 'package:gtd_task_manager/viewmodels/auth_viewmodel.dart';
 import 'package:gtd_task_manager/viewmodels/notion_viewmodel.dart';
 import 'package:gtd_task_manager/viewmodels/task_viewmodel.dart';
-import 'package:gtd_task_manager/views/screens/account_settings_screen.dart';
-import 'package:gtd_task_manager/views/screens/settings_screen.dart';
+import 'package:gtd_task_manager/views/widgets/glass_app_bar.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   final String uid;
@@ -198,70 +197,45 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     // tasksProvider は family で uid を渡して Firestore 上のタスク一覧を取得する前提
     final tasksAsync = ref.watch(tasksProvider);
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('タスク一覧'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.settings),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => const SettingsScreen()),
-              );
-            },
-          ),
-          IconButton(
-            icon: const Icon(Icons.face),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (_) => const AccountSettingsScreen()),
-              );
-            },
-          ),
-          IconButton(
-            icon: const Icon(Icons.logout),
-            onPressed: () async {
-              await authVM.signOut();
-              // サインアウト後の遷移は各自実装
-            },
-          ),
-        ],
-      ),
-      body: tasksAsync.when(
-        data: (tasks) {
-          if (tasks.isEmpty) {
-            return const Center(child: Text('タスクがありません。'));
-          }
-          return ListView.builder(
-            itemCount: tasks.length,
-            itemBuilder: (context, index) {
-              final task = tasks[index];
-              return ListTile(
-                title: Text(task.title),
-                subtitle:
-                    (task.description != null && task.description!.isNotEmpty)
-                        ? Text(task.description!)
+      extendBodyBehindAppBar: true,
+      appBar: GlassAppBar(),
+      body: Container(
+        color: Colors.white,
+        child: tasksAsync.when(
+          data: (tasks) {
+            if (tasks.isEmpty) {
+              return const Center(child: Text('タスクがありません。'));
+            }
+            return ListView.builder(
+              itemCount: tasks.length,
+              itemBuilder: (context, index) {
+                final task = tasks[index];
+                return ListTile(
+                  title: Text(task.title),
+                  subtitle:
+                      (task.description != null && task.description!.isNotEmpty)
+                          ? Text(task.description!)
+                          : null,
+                  trailing: Icon(
+                    task.status == TaskStatus.completed
+                        ? Icons.check_circle
+                        : Icons.radio_button_unchecked,
+                    color: task.status == TaskStatus.completed
+                        ? Colors.green
                         : null,
-                trailing: Icon(
-                  task.status == TaskStatus.completed
-                      ? Icons.check_circle
-                      : Icons.radio_button_unchecked,
-                  color:
-                      task.status == TaskStatus.completed ? Colors.green : null,
-                ),
-                // todo: タップ時の処理を追加(タスク詳細画面へ遷移)→TaskDetailScreenを表示
-                // BottomModalSheetでタスクの詳細を表示する
-                onTap: () {
-                  _showTaskDetailModal(task);
-                },
-              );
-            },
-          );
-        },
-        loading: () => const Center(child: CircularProgressIndicator()),
-        error: (err, stack) => Center(child: Text('エラー: $err')),
+                  ),
+                  // todo: タップ時の処理を追加(タスク詳細画面へ遷移)→TaskDetailScreenを表示
+                  // BottomModalSheetでタスクの詳細を表示する
+                  onTap: () {
+                    _showTaskDetailModal(task);
+                  },
+                );
+              },
+            );
+          },
+          loading: () => const Center(child: CircularProgressIndicator()),
+          error: (err, stack) => Center(child: Text('エラー: $err')),
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: blueColor,
