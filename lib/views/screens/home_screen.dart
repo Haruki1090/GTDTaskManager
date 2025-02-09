@@ -62,7 +62,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         children: [
                           // todo: タスク詳細入力欄を追加(カレンダーなど)
                           IconButton(
-                            icon: const Icon(Icons.add, color: Colors.white),
+                            icon: const Icon(Icons.send, color: Colors.white),
                             style: ButtonStyle(
                               backgroundColor:
                                   WidgetStateProperty.all<Color>(blueColor),
@@ -110,6 +110,77 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         ],
                       ),
                       const SizedBox(height: 100),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Future<void> _showTaskDetailModal(Task task) async {
+    await showModalBottomSheet(
+      context: context,
+      isScrollControlled: true, // キーボードに合わせて高さ調整
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(8)),
+      ),
+      builder: (context) {
+        return Padding(
+          padding: MediaQuery.of(context).viewInsets, // キーボード分の余白
+          child: Container(
+            padding: const EdgeInsets.all(8),
+            child: Wrap(
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      TextField(
+                        controller: _taskTitleController..text = task.title,
+                        decoration: const InputDecoration(
+                          hintText: 'タスクのタイトルを入力',
+                        ),
+                      ),
+                      const SizedBox(height: 24),
+                      TextField(
+                        controller: _taskDescController
+                          ..text = task.description ?? '',
+                        decoration: const InputDecoration(
+                          hintText: 'タスクの詳細を入力',
+                        ),
+                      ),
+                      const SizedBox(height: 24),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          IconButton(
+                            icon: const Icon(Icons.send, color: Colors.white),
+                            style: ButtonStyle(
+                              backgroundColor:
+                                  WidgetStateProperty.all<Color>(blueColor),
+                            ),
+                            onPressed: () async {
+                              final taskVM = ref.read(taskViewModelProvider);
+                              await taskVM.updateTask(
+                                task.copyWith(
+                                  title: _taskTitleController.text.trim(),
+                                  description: _taskDescController.text.trim(),
+                                ),
+                              );
+
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                        ],
+                      ),
                     ],
                   ),
                 ),
@@ -183,21 +254,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 // todo: タップ時の処理を追加(タスク詳細画面へ遷移)→TaskDetailScreenを表示
                 // BottomModalSheetでタスクの詳細を表示する
                 onTap: () {
-                  showModalBottomSheet(
-                    showDragHandle: true,
-                    context: context,
-                    builder: (BuildContext context) {
-                      return Column(
-                        children: [
-                          Text(task.title),
-                          Text(task.description ?? ''),
-                          Text(task.status.toString()),
-                          Text(task.createdAt.toString()),
-                          Text(task.updatedAt.toString()),
-                        ],
-                      );
-                    },
-                  );
+                  _showTaskDetailModal(task);
                 },
               );
             },
@@ -207,6 +264,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         error: (err, stack) => Center(child: Text('エラー: $err')),
       ),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: blueColor,
+        foregroundColor: Colors.white,
         onPressed: _showAddTaskModal,
         child: const Icon(Icons.add),
       ),
