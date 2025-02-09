@@ -44,89 +44,74 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             child: Wrap(
               children: [
                 Container(
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(16),
-                      // boxShadow: [
-                      //   BoxShadow(
-                      //     color: Colors.black.withOpacity(0.1),
-                      //     blurRadius: 10,
-                      //     spreadRadius: 2,
-                      //   ),
-                      // ],
-                    ),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        TextField(
-                          controller: _taskTitleController,
-                          decoration: const InputDecoration(
-                            hintText: 'タスクのタイトルを入力',
-                          ),
-                        ),
-                        const SizedBox(height: 24),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            // todo: タスク詳細入力欄を追加(カレンダーなど)
-                            IconButton(
-                              icon: const Icon(Icons.add, color: Colors.white),
-                              style: ButtonStyle(
-                                backgroundColor:
-                                    WidgetStateProperty.all<Color>(blueColor),
-                              ),
-                              onPressed: () async {
-                                final title = _taskTitleController.text.trim();
-                                final desc = _taskDescController.text.trim();
-                                if (title.isEmpty) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(content: Text('タイトルは必須です。')),
-                                  );
-                                  return;
-                                }
-                                final newTask = Task(
-                                  title: title,
-                                  description: desc,
-                                  createdAt: DateTime.now(),
-                                  updatedAt: DateTime.now(),
-                                  userId: widget.uid,
-                                  status: TaskStatus.inbox,
-                                );
-                                // Firebase にタスク追加
-                                final taskVM = ref.read(taskViewModelProvider);
-                                await taskVM.addTask(newTask);
-                                // Notion 連携
-                                final notionVM =
-                                    ref.read(notionViewModelProvider);
-                                final notionAccount =
-                                    notionVM.currentNotionAccount;
-                                if (notionAccount != null) {
-                                  try {
-                                    await NotionService.addTask(
-                                        notionAccount, newTask);
-                                  } catch (e) {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(content: Text('Notion同期失敗: $e')),
-                                    );
-                                  }
-                                }
-                                _taskTitleController.clear();
-                                _taskDescController.clear();
-                                Navigator.of(context).pop();
-                              },
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 100),
-                      ],
-                    ),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(16),
                   ),
-                  // ).asGlass(
-                  //   blurX: 10,
-                  //   blurY: 10,
-                  //   tintColor: Colors.white.withOpacity(0.1),
-                  //   clipBorderRadius: BorderRadius.circular(16),
-                  // ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      TextField(
+                        controller: _taskTitleController,
+                        decoration: const InputDecoration(
+                          hintText: 'タスクのタイトルを入力',
+                        ),
+                      ),
+                      const SizedBox(height: 24),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          // todo: タスク詳細入力欄を追加(カレンダーなど)
+                          IconButton(
+                            icon: const Icon(Icons.add, color: Colors.white),
+                            style: ButtonStyle(
+                              backgroundColor:
+                                  WidgetStateProperty.all<Color>(blueColor),
+                            ),
+                            onPressed: () async {
+                              final title = _taskTitleController.text.trim();
+                              final desc = _taskDescController.text.trim();
+                              if (title.isEmpty) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(content: Text('タイトルは必須です。')),
+                                );
+                                return;
+                              }
+                              final newTask = Task(
+                                title: title,
+                                description: desc,
+                                createdAt: DateTime.now(),
+                                updatedAt: DateTime.now(),
+                                userId: widget.uid,
+                                status: TaskStatus.inbox,
+                              );
+                              // Firebase にタスク追加
+                              final taskVM = ref.read(taskViewModelProvider);
+                              await taskVM.addTask(newTask);
+                              // Notion 連携
+                              final notionVM =
+                                  ref.read(notionViewModelProvider);
+                              final notionAccount =
+                                  notionVM.currentNotionAccount;
+                              if (notionAccount != null) {
+                                try {
+                                  await NotionService.addTask(
+                                      notionAccount, newTask);
+                                } catch (e) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(content: Text('Notion同期失敗: $e')),
+                                  );
+                                }
+                              }
+                              _taskTitleController.clear();
+                              _taskDescController.clear();
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 100),
+                    ],
+                  ),
                 ),
               ],
             ),
@@ -195,8 +180,24 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   color:
                       task.status == TaskStatus.completed ? Colors.green : null,
                 ),
+                // todo: タップ時の処理を追加(タスク詳細画面へ遷移)→TaskDetailScreenを表示
+                // BottomModalSheetでタスクの詳細を表示する
                 onTap: () {
-                  // タスク編集画面への遷移があれば実装
+                  showModalBottomSheet(
+                    showDragHandle: true,
+                    context: context,
+                    builder: (BuildContext context) {
+                      return Column(
+                        children: [
+                          Text(task.title),
+                          Text(task.description ?? ''),
+                          Text(task.status.toString()),
+                          Text(task.createdAt.toString()),
+                          Text(task.updatedAt.toString()),
+                        ],
+                      );
+                    },
+                  );
                 },
               );
             },
