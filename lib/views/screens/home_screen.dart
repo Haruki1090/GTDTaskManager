@@ -1,4 +1,3 @@
-// views/home_screen.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gtd_task_manager/models/task.dart';
@@ -10,7 +9,7 @@ import 'package:gtd_task_manager/views/screens/account_settings_screen.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   final String uid;
-  const HomeScreen({Key? key, required this.uid}) : super(key: key);
+  const HomeScreen({super.key, required this.uid});
 
   @override
   ConsumerState<HomeScreen> createState() => _HomeScreenState();
