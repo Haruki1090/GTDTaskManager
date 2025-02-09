@@ -12,9 +12,15 @@ final notionViewModelProvider = Provider<NotionViewModel>((ref) {
 
 class NotionViewModel {
   final NotionRepository notionRepository;
+  NotionAccount? currentNotionAccount;
+
   NotionViewModel({required this.notionRepository});
 
+  // Notion 連携を開始し、連携成功なら currentNotionAccount を設定する
   Future<NotionAccount?> linkNotion() async {
-    return await notionRepository.linkNotion();
+    final account = await notionRepository.linkNotion();
+    if (account != null) {
+      currentNotionAccount = account;
+    }
   }
 }
