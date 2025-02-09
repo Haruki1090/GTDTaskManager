@@ -45,6 +45,14 @@ class NotionService {
                 }
               ]
             },
+          if (task.context != null)
+            "Description": {
+              "rich_text": [
+                {
+                  "text": {"content": task.description}
+                }
+              ]
+            },
         },
       };
 
