@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "303320548151",
+    "project_id": "gtdtaskmanager",
+    "storage_bucket": "gtdtaskmanager.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:303320548151:android:695a1d0511961370b750b2",
+        "android_client_info": {
+          "package_name": "com.example.gtd_task_manager"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA8ugxJhRRUQIeVHZWCHQiG4nCGl24t0DE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
