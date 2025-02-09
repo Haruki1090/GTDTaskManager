@@ -5,7 +5,7 @@ import 'package:gtd_task_manager/viewmodels/auth_viewmodel.dart';
 import 'settings_screen.dart';
 
 class HomeScreen extends ConsumerWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  const HomeScreen({Key? key, required String uid}) : super(key: key);
 
   // ※ここではタスク一覧は未実装のプレースホルダーとしています
   @override
