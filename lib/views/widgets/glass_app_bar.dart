@@ -56,8 +56,29 @@ class GlassAppBar extends ConsumerWidget implements PreferredSizeWidget {
             IconButton(
               icon: const Icon(Icons.logout),
               onPressed: () async {
-                await authVM.signOut();
-                // サインアウト後の遷移は各自実装
+                showDialog(
+                  context: context,
+                  builder: (context) {
+                    return AlertDialog(
+                      title: const Text('ログアウトしますか？'),
+                      actions: [
+                        TextButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: const Text('キャンセル'),
+                        ),
+                        TextButton(
+                          onPressed: () async {
+                            Navigator.pop(context);
+                            await authVM.signOut();
+                          },
+                          child: const Text('ログアウト'),
+                        ),
+                      ],
+                    );
+                  },
+                );
               },
             ),
           ],
