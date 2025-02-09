@@ -3,8 +3,8 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gtd_task_manager/services/firebase_initializer.dart';
 import 'package:gtd_task_manager/viewmodels/auth_viewmodel.dart';
-import 'package:gtd_task_manager/views/home_screen.dart';
-import 'package:gtd_task_manager/views/login_screen.dart';
+import 'package:gtd_task_manager/views/screens/home_screen.dart';
+import 'package:gtd_task_manager/views/screens/login_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
