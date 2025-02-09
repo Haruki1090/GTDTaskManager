@@ -6,6 +6,7 @@ import 'package:gtd_task_manager/viewmodels/auth_viewmodel.dart';
 import 'package:gtd_task_manager/viewmodels/notion_viewmodel.dart';
 import 'package:gtd_task_manager/viewmodels/task_viewmodel.dart';
 import 'package:gtd_task_manager/views/screens/account_settings_screen.dart';
+import 'package:gtd_task_manager/views/screens/settings_screen.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   final String uid;
@@ -115,7 +116,16 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         title: const Text('タスク一覧'),
         actions: [
           IconButton(
-            icon: const Icon(Icons.settings),
+            icon: const Icon(Icons.lightbulb),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const SettingsScreen()),
+              );
+            },
+          ),
+          IconButton(
+            icon: const Icon(Icons.face),
             onPressed: () {
               Navigator.push(
                 context,
