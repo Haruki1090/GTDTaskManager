@@ -59,38 +59,41 @@ class _AccountSettingsScreenState extends ConsumerState<AccountSettingsScreen> {
     final account = ref.watch(authViewModelProvider).currentAccount;
     return Scaffold(
       appBar: AppBar(title: const Text('アカウント設定')),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: account == null
-            ? const Center(child: CircularProgressIndicator())
-            : Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('メール: ${account.email}',
-                      style: const TextStyle(fontSize: 16)),
-                  const SizedBox(height: 16),
-                  TextField(
-                    controller: _usernameController,
-                    decoration: const InputDecoration(
-                      labelText: 'ユーザー名',
-                      border: OutlineInputBorder(),
+      body: Container(
+        color: Colors.white,
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: account == null
+              ? const Center(child: CircularProgressIndicator())
+              : Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('メール: ${account.email}',
+                        style: const TextStyle(fontSize: 16)),
+                    const SizedBox(height: 16),
+                    TextField(
+                      controller: _usernameController,
+                      decoration: const InputDecoration(
+                        labelText: 'ユーザー名',
+                        border: OutlineInputBorder(),
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 16),
-                  TextField(
-                    controller: _iconUrlController,
-                    decoration: const InputDecoration(
-                      labelText: 'アイコン画像 URL',
-                      border: OutlineInputBorder(),
+                    const SizedBox(height: 16),
+                    TextField(
+                      controller: _iconUrlController,
+                      decoration: const InputDecoration(
+                        labelText: 'アイコン画像 URL',
+                        border: OutlineInputBorder(),
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 24),
-                  ElevatedButton(
-                    onPressed: _updateAccount,
-                    child: const Text('更新'),
-                  ),
-                ],
-              ),
+                    const SizedBox(height: 24),
+                    ElevatedButton(
+                      onPressed: _updateAccount,
+                      child: const Text('更新'),
+                    ),
+                  ],
+                ),
+        ),
       ),
     );
   }
