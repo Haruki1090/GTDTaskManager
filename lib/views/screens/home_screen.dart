@@ -116,7 +116,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         title: const Text('タスク一覧'),
         actions: [
           IconButton(
-            icon: const Icon(Icons.lightbulb),
+            icon: const Icon(Icons.settings),
             onPressed: () {
               Navigator.push(
                 context,
