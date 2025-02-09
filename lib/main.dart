@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:gtd_task_manager/viewmodels/auth_viewmodel.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // todo:環境変数読み込み
-  // todo:Firebaseイニシャライズ
+  await FirebaseInitializer.initializeFirebase();
   runApp(const ProviderScope(child: MyApp()));
 }
 
@@ -17,12 +18,25 @@ class MyApp extends ConsumerWidget {
     final authStateChanges = ref.watch(authStateProvider);
 
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      title: 'GTD Task Manager',
+      theme: ThemeData.light(),
+      darkTheme: ThemeData.dark(),
+      themeMode: ThemeMode.system, // デバイスのテーマに合わせる
+      home: authStateChanges.when(
+        data: (user) {
+          if (user != null) {
+            return const HomeScreen();
+          } else {
+            return const LoginScreen();
+          }
+        },
+        loading: () => const Scaffold(
+          body: Center(child: CircularProgressIndicator()),
+        ),
+        error: (error, stack) => Scaffold(
+          body: Center(child: Text('Error: $error')),
+        )
+      );
     );
   }
 }
