@@ -39,6 +39,16 @@ class TaskViewModel {
     await taskRepository.addTask(task);
   }
 
+  // タスクを Firestore から削除する
+  Future<void> deleteTask(String taskId) async {
+    await taskRepository.deleteTask(taskId);
+  }
+
+  // タスクを Firestore で更新する
+  Future<void> updateTask(Task task) async {
+    await taskRepository.updateTask(task);
+  }
+
   // 指定ユーザーのタスク一覧を取得し、Notion へ同期する
   Future<void> syncTasksWithNotion(
       String userId, NotionAccount notionAccount) async {
