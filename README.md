@@ -1,17 +1,53 @@
 # gtd_task_manager
 
-A new Flutter project.
+```
+                   +--------------------------+
+                   |         View             |
+                   | (Flutter Widgets, UI)    |
+                   +-------------+------------+
+                                 │
+                                 ▼
+                   +--------------------------+
+                   |       ViewModel          |
+                   |  (Riverpod Notifiers)    |
+                   +-------------+------------+
+                                 │
+                                 ▼
+                   +--------------------------+
+                   |         Model            |
+                   | (Freezed / JSON Serializable) |
+                   +-------------+------------+
+                                 │
+                                 ▼
+                   +--------------------------+
+                   |   Repository / Services  |
+                   | (Firebase / Notion API等)  |
+                   +--------------------------+
 
-## Getting Started
+```
 
-This project is a starting point for a Flutter application.
+```
+GTDTaskManager/
+├── pubspec.yaml
+├── .env
+└── lib/
+    ├── main.dart
+    ├── constants/
+    │   └── notion_colors.dart
+    ├── models/
+    │   └── task.dart        // ※task.freezed.dart, task.g.dartは生成ファイル
+    ├── repositories/
+    │   ├── auth_repository.dart
+    │   └── task_repository.dart
+    ├── services/
+    │   ├── firebase_initializer.dart
+    │   └── notion_service.dart
+    ├── viewmodels/
+    │   ├── auth_viewmodel.dart
+    │   └── task_viewmodel.dart   // ※必要に応じて実装
+    └── views/
+        ├── login_screen.dart
+        ├── home_screen.dart
+        └── settings_screen.dart
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
-# GTDTaskManager
+```
