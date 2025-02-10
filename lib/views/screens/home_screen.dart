@@ -6,6 +6,8 @@ import 'package:gtd_task_manager/services/notion_service.dart';
 import 'package:gtd_task_manager/viewmodels/auth_viewmodel.dart';
 import 'package:gtd_task_manager/viewmodels/notion_viewmodel.dart';
 import 'package:gtd_task_manager/viewmodels/task_viewmodel.dart';
+import 'package:gtd_task_manager/views/screens/account_settings_screen.dart';
+import 'package:gtd_task_manager/views/screens/settings_screen.dart';
 import 'package:gtd_task_manager/views/widgets/glass_app_bar.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
@@ -193,12 +195,79 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final authVM = ref.read(authViewModelProvider);
+    ref.read(authViewModelProvider);
     // tasksProvider は family で uid を渡して Firestore 上のタスク一覧を取得する前提
     final tasksAsync = ref.watch(tasksProvider);
+    final authVM = ref.read(authViewModelProvider);
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: GlassAppBar(),
+      drawer: Drawer(
+        child: ListView(
+          children: [
+            IconButton(
+              icon: const Icon(Icons.settings),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const SettingsScreen()),
+                );
+              },
+            ),
+            IconButton(
+              icon: const Icon(Icons.face),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (_) => const AccountSettingsScreen()),
+                );
+              },
+            ),
+            IconButton(
+              icon: const Icon(Icons.logout),
+              onPressed: () async {
+                showDialog(
+                  context: context,
+                  builder: (context) {
+                    return AlertDialog(
+                      backgroundColor: Colors.white,
+                      title: const Text('ログアウトしますか？',
+                          textAlign: TextAlign.left,
+                          style: TextStyle(fontSize: 20)),
+                      actions: [
+                        TextButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child:
+                              Text('キャンセル', style: TextStyle(color: redColor)),
+                        ),
+                        Container(
+                          width: 100,
+                          height: 40,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            color: blueColor,
+                          ),
+                          child: TextButton(
+                            onPressed: () async {
+                              Navigator.pop(context);
+                              await authVM.signOut();
+                            },
+                            child: const Text('ログアウト',
+                                style: TextStyle(color: Colors.white)),
+                          ),
+                        ),
+                      ],
+                    );
+                  },
+                );
+              },
+            ),
+          ],
+        ),
+      ),
       body: Container(
         color: Colors.white,
         child: tasksAsync.when(
