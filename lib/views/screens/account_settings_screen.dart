@@ -80,13 +80,8 @@ class _AccountSettingsScreenState extends ConsumerState<AccountSettingsScreen> {
                     const SizedBox(height: 16),
                     // todo: アイコン画像のプレビューを表示する
                     // todo: アイコン画像をアップロードできるようにする(Firebase Storageを使う)
-                    TextField(
-                      controller: _iconUrlController,
-                      decoration: const InputDecoration(
-                        labelText: 'アイコン画像 URL',
-                        border: OutlineInputBorder(),
-                      ),
-                    ),
+                    const Text('アイコン画像の設定を実装する予定',
+                        style: TextStyle(fontSize: 16, color: Colors.red)),
                     const SizedBox(height: 24),
                     ElevatedButton(
                       onPressed: _updateAccount,
