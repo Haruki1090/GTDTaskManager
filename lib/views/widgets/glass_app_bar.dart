@@ -24,7 +24,7 @@ class GlassAppBar extends ConsumerWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final authVM = ref.read(authViewModelProvider);
+    ref.read(authViewModelProvider);
     return ClipRect(
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: blur, sigmaY: blur),
