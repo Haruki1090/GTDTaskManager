@@ -219,25 +219,30 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           child: ListView(
             children: [
               ListTile(
-                title: const Text('設定', style: TextStyle(color: Colors.white)),
-                leading: const Icon(Icons.settings, color: Colors.white),
+                title:
+                    const Text('アカウント', style: TextStyle(color: Colors.white)),
+                leading: const Icon(Icons.face, color: Colors.white),
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (_) => const SettingsScreen()),
-                  );
+                  showModalBottomSheet(
+                      context: context,
+                      builder: (_) => AccountSettingsScreen());
+                  // Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(
+                  //       builder: (_) => const AccountSettingsScreen()),
+                  // );
                 },
               ),
               ListTile(
-                title: const Text('アカウント設定',
-                    style: TextStyle(color: Colors.white)),
-                leading: const Icon(Icons.face, color: Colors.white),
+                title: const Text('設定', style: TextStyle(color: Colors.white)),
+                leading: const Icon(Icons.settings, color: Colors.white),
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (_) => const AccountSettingsScreen()),
-                  );
+                  showModalBottomSheet(
+                      context: context, builder: (_) => const SettingsScreen());
+                  // Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(builder: (_) => const SettingsScreen()),
+                  // );
                 },
               ),
               ListTile(
