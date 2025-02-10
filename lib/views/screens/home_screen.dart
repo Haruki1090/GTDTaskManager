@@ -199,118 +199,135 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     // tasksProvider は family で uid を渡して Firestore 上のタスク一覧を取得する前提
     final tasksAsync = ref.watch(tasksProvider);
     final authVM = ref.read(authViewModelProvider);
-    return Scaffold(
-      extendBodyBehindAppBar: true,
-      appBar: GlassAppBar(),
-      drawer: Drawer(
-        child: ListView(
-          children: [
-            IconButton(
-              icon: const Icon(Icons.settings),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => const SettingsScreen()),
-                );
-              },
-            ),
-            IconButton(
-              icon: const Icon(Icons.face),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (_) => const AccountSettingsScreen()),
-                );
-              },
-            ),
-            IconButton(
-              icon: const Icon(Icons.logout),
-              onPressed: () async {
-                showDialog(
-                  context: context,
-                  builder: (context) {
-                    return AlertDialog(
-                      backgroundColor: Colors.white,
-                      title: const Text('ログアウトしますか？',
-                          textAlign: TextAlign.left,
-                          style: TextStyle(fontSize: 20)),
-                      actions: [
-                        TextButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          child:
-                              Text('キャンセル', style: TextStyle(color: redColor)),
-                        ),
-                        Container(
-                          width: 100,
-                          height: 40,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8),
-                            color: blueColor,
-                          ),
-                          child: TextButton(
-                            onPressed: () async {
+    final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+    return PopScope(
+      canPop: true, // 戻る操作を許可
+      onPopInvokedWithResult: (didPop, result) {
+        if (didPop) {
+          // todo: 戻る操作が許可された場合の処理
+        } else {
+          // todo: 戻る操作がブロックされた場合の処理
+        }
+      },
+      child: Scaffold(
+        extendBodyBehindAppBar: true,
+        appBar: GlassAppBar(),
+        key: scaffoldKey,
+        drawer: Drawer(
+          backgroundColor: Colors.white,
+          width: MediaQuery.of(context).size.width * 0.6,
+          child: ListView(
+            children: [
+              ListTile(
+                title: const Text('設定'),
+                leading: const Icon(Icons.settings),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => const SettingsScreen()),
+                  );
+                },
+              ),
+              ListTile(
+                title: const Text('アカウント設定'),
+                leading: const Icon(Icons.face),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (_) => const AccountSettingsScreen()),
+                  );
+                },
+              ),
+              ListTile(
+                title: const Text('ログアウト'),
+                leading: const Icon(Icons.logout),
+                onTap: () async {
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        backgroundColor: Colors.white,
+                        title: const Text('ログアウトしますか？',
+                            textAlign: TextAlign.left,
+                            style: TextStyle(fontSize: 20)),
+                        actions: [
+                          TextButton(
+                            onPressed: () {
                               Navigator.pop(context);
-                              await authVM.signOut();
                             },
-                            child: const Text('ログアウト',
-                                style: TextStyle(color: Colors.white)),
+                            child: Text('キャンセル',
+                                style: TextStyle(color: redColor)),
                           ),
-                        ),
-                      ],
-                    );
-                  },
-                );
-              },
-            ),
-          ],
+                          Container(
+                            width: 100,
+                            height: 40,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8),
+                              color: blueColor,
+                            ),
+                            child: TextButton(
+                              onPressed: () async {
+                                Navigator.pop(context);
+                                await authVM.signOut();
+                              },
+                              child: const Text('ログアウト',
+                                  style: TextStyle(color: Colors.white)),
+                            ),
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                },
+              ),
+            ],
+          ),
         ),
-      ),
-      body: Container(
-        color: Colors.white,
-        child: tasksAsync.when(
-          data: (tasks) {
-            if (tasks.isEmpty) {
-              return const Center(child: Text('タスクがありません。'));
-            }
-            return ListView.builder(
-              itemCount: tasks.length,
-              itemBuilder: (context, index) {
-                final task = tasks[index];
-                return ListTile(
-                  title: Text(task.title),
-                  subtitle:
-                      (task.description != null && task.description!.isNotEmpty)
-                          ? Text(task.description!)
-                          : null,
-                  trailing: Icon(
-                    task.status == TaskStatus.completed
-                        ? Icons.check_circle
-                        : Icons.radio_button_unchecked,
-                    color: task.status == TaskStatus.completed
-                        ? Colors.green
+        body: Container(
+          color: Colors.white,
+          child: tasksAsync.when(
+            data: (tasks) {
+              if (tasks.isEmpty) {
+                return const Center(child: Text('タスクがありません。'));
+              }
+              return ListView.builder(
+                itemCount: tasks.length,
+                itemBuilder: (context, index) {
+                  final task = tasks[index];
+                  return ListTile(
+                    title: Text(task.title),
+                    subtitle: (task.description != null &&
+                            task.description!.isNotEmpty)
+                        ? Text(task.description!)
                         : null,
-                  ),
-                  // todo: タップ時の処理を追加(タスク詳細画面へ遷移)→TaskDetailScreenを表示
-                  // BottomModalSheetでタスクの詳細を表示する
-                  onTap: () {
-                    _showTaskDetailModal(task);
-                  },
-                );
-              },
-            );
-          },
-          loading: () => const Center(child: CircularProgressIndicator()),
-          error: (err, stack) => Center(child: Text('エラー: $err')),
+                    trailing: Icon(
+                      task.status == TaskStatus.completed
+                          ? Icons.check_circle
+                          : Icons.radio_button_unchecked,
+                      color: task.status == TaskStatus.completed
+                          ? Colors.green
+                          : null,
+                    ),
+                    // todo: タップ時の処理を追加(タスク詳細画面へ遷移)→TaskDetailScreenを表示
+                    // BottomModalSheetでタスクの詳細を表示する
+                    onTap: () {
+                      _showTaskDetailModal(task);
+                    },
+                  );
+                },
+              );
+            },
+            loading: () => const Center(child: CircularProgressIndicator()),
+            error: (err, stack) => Center(child: Text('エラー: $err')),
+          ),
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: blueColor,
-        foregroundColor: Colors.white,
-        onPressed: _showAddTaskModal,
-        child: const Icon(Icons.add),
+        floatingActionButton: FloatingActionButton(
+          backgroundColor: blueColor,
+          foregroundColor: Colors.white,
+          onPressed: _showAddTaskModal,
+          child: const Icon(Icons.add),
+        ),
       ),
     );
   }
