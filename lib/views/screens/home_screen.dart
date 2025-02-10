@@ -214,13 +214,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         appBar: GlassAppBar(),
         key: scaffoldKey,
         drawer: Drawer(
-          backgroundColor: Colors.white,
+          backgroundColor: blueColor,
           width: MediaQuery.of(context).size.width * 0.6,
           child: ListView(
             children: [
               ListTile(
-                title: const Text('設定'),
-                leading: const Icon(Icons.settings),
+                title: const Text('設定', style: TextStyle(color: Colors.white)),
+                leading: const Icon(Icons.settings, color: Colors.white),
                 onTap: () {
                   Navigator.push(
                     context,
@@ -229,8 +229,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 },
               ),
               ListTile(
-                title: const Text('アカウント設定'),
-                leading: const Icon(Icons.face),
+                title: const Text('アカウント設定',
+                    style: TextStyle(color: Colors.white)),
+                leading: const Icon(Icons.face, color: Colors.white),
                 onTap: () {
                   Navigator.push(
                     context,
@@ -240,8 +241,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 },
               ),
               ListTile(
-                title: const Text('ログアウト'),
-                leading: const Icon(Icons.logout),
+                title:
+                    const Text('ログアウト', style: TextStyle(color: Colors.white)),
+                leading: const Icon(Icons.logout, color: Colors.white),
                 onTap: () async {
                   showDialog(
                     context: context,
