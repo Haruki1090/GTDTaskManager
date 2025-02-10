@@ -58,9 +58,6 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('設定'),
-      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
