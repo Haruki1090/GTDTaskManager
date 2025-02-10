@@ -32,7 +32,7 @@ class GlassAppBar extends ConsumerWidget implements PreferredSizeWidget {
           title: Text('ALL TASKS',
               style: TextStyle(
                   color: blueColor, fontSize: 24, fontWeight: FontWeight.bold)),
-          backgroundColor: backgroundColor.withOpacity(opacity),
+          backgroundColor: backgroundColor.withAlpha((opacity * 255).toInt()),
           elevation: 0,
         ),
       ),
