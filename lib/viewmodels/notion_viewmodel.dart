@@ -22,5 +22,6 @@ class NotionViewModel {
     if (account != null) {
       currentNotionAccount = account;
     }
+    return null;
   }
 }
