@@ -61,7 +61,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
-                          // todo: タスク詳細入力欄を追加(カレンダーなど)
+                          // todo: タスクの締め切り日を設定する機能の実装
+                          // todo: タスクのステータスを設定する機能の実装
+                          // todo: タスクのプロジェクトを設定する機能の実装
+                          // todo: タスクのコンテキスト（ラベル）を設定する機能の実装
                           IconButton(
                             icon: const Icon(Icons.send, color: Colors.white),
                             style: ButtonStyle(
