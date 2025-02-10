@@ -320,6 +320,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   );
                 },
               ),
+              Divider(),
+              // todo: プロジェクト一覧の表示
             ],
           ),
         ),
