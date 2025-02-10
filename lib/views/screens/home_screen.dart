@@ -68,7 +68,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                   color: Colors.white),
                               style: ButtonStyle(
                                 backgroundColor:
-                                    WidgetStateProperty.all<Color>(blueColor),
+                                    WidgetStateProperty.all<Color>(greyColor),
                               ),
                               onPressed: () {}),
                           // todo: タスクのステータスを設定する機能の実装
@@ -77,7 +77,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                 color: Colors.white),
                             style: ButtonStyle(
                               backgroundColor:
-                                  WidgetStateProperty.all<Color>(blueColor),
+                                  WidgetStateProperty.all<Color>(greyColor),
                             ),
                             onPressed: () {},
                           ),
@@ -86,19 +86,20 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             icon: const Icon(Icons.folder, color: Colors.white),
                             style: ButtonStyle(
                               backgroundColor:
-                                  WidgetStateProperty.all<Color>(blueColor),
+                                  WidgetStateProperty.all<Color>(greyColor),
                             ),
                             onPressed: () {},
                           ),
                           // todo: タスクのコンテキスト（ラベル）を設定する機能の実装
                           IconButton(
-                            icon: const Icon(Icons.label, color: Colors.white),
+                            icon: Icon(Icons.label, color: Colors.white),
                             style: ButtonStyle(
                               backgroundColor:
-                                  WidgetStateProperty.all<Color>(blueColor),
+                                  WidgetStateProperty.all<Color>(greyColor),
                             ),
                             onPressed: () {},
                           ),
+                          // 追加送信ボタン
                           IconButton(
                             icon: const Icon(Icons.send, color: Colors.white),
                             style: ButtonStyle(
