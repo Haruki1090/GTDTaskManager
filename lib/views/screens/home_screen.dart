@@ -29,6 +29,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     super.dispose();
   }
 
+  // 新規タスク追加モーダル
   Future<void> _showAddTaskModal() async {
     await showModalBottomSheet(
       context: context,
@@ -62,9 +63,42 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           // todo: タスクの締め切り日を設定する機能の実装
+                          IconButton(
+                              icon: const Icon(Icons.calendar_today,
+                                  color: Colors.white),
+                              style: ButtonStyle(
+                                backgroundColor:
+                                    WidgetStateProperty.all<Color>(blueColor),
+                              ),
+                              onPressed: () {}),
                           // todo: タスクのステータスを設定する機能の実装
+                          IconButton(
+                            icon: const Icon(Icons.check_circle,
+                                color: Colors.white),
+                            style: ButtonStyle(
+                              backgroundColor:
+                                  WidgetStateProperty.all<Color>(blueColor),
+                            ),
+                            onPressed: () {},
+                          ),
                           // todo: タスクのプロジェクトを設定する機能の実装
+                          IconButton(
+                            icon: const Icon(Icons.folder, color: Colors.white),
+                            style: ButtonStyle(
+                              backgroundColor:
+                                  WidgetStateProperty.all<Color>(blueColor),
+                            ),
+                            onPressed: () {},
+                          ),
                           // todo: タスクのコンテキスト（ラベル）を設定する機能の実装
+                          IconButton(
+                            icon: const Icon(Icons.label, color: Colors.white),
+                            style: ButtonStyle(
+                              backgroundColor:
+                                  WidgetStateProperty.all<Color>(blueColor),
+                            ),
+                            onPressed: () {},
+                          ),
                           IconButton(
                             icon: const Icon(Icons.send, color: Colors.white),
                             style: ButtonStyle(
