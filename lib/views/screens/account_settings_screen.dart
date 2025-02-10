@@ -58,7 +58,6 @@ class _AccountSettingsScreenState extends ConsumerState<AccountSettingsScreen> {
   Widget build(BuildContext context) {
     final account = ref.watch(authViewModelProvider).currentAccount;
     return Scaffold(
-      appBar: AppBar(title: const Text('アカウント設定')),
       body: Container(
         color: Colors.white,
         child: Padding(
@@ -79,6 +78,8 @@ class _AccountSettingsScreenState extends ConsumerState<AccountSettingsScreen> {
                       ),
                     ),
                     const SizedBox(height: 16),
+                    // todo: アイコン画像のプレビューを表示する
+                    // todo: アイコン画像をアップロードできるようにする(Firebase Storageを使う)
                     TextField(
                       controller: _iconUrlController,
                       decoration: const InputDecoration(
