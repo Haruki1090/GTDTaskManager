@@ -307,7 +307,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                           ? Colors.green
                           : null,
                     ),
-                    // todo: タップ時の処理を追加(タスク詳細画面へ遷移)→TaskDetailScreenを表示
                     // BottomModalSheetでタスクの詳細を表示する
                     onTap: () {
                       _showTaskDetailModal(task);
