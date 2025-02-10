@@ -8,6 +8,10 @@ import 'package:gtd_task_manager/viewmodels/auth_viewmodel.dart';
 final taskRepositoryProvider =
     Provider<TaskRepository>((ref) => TaskRepository());
 
+// タスク一覧取得の Provider
+// ユーザーがログインしている場合は、そのユーザーのタスク一覧を取得する
+// ユーザーがログインしていない場合は、空のリストを返す
+// ユーザーがログインしているかどうかは、authStateProvider で管理している
 final tasksProvider = StreamProvider.autoDispose<List<Task>>((ref) {
   final asyncUser = ref.watch(authStateProvider);
   return asyncUser.when(
@@ -25,11 +29,16 @@ final tasksProvider = StreamProvider.autoDispose<List<Task>>((ref) {
   );
 });
 
+// タスクの ViewModel の Provider
+// taskRepositoryProvider を使って TaskViewModel を作成する
+// この Provider を使って、タスクの追加、削除、更新、Notion への同期を行う
 final taskViewModelProvider = Provider<TaskViewModel>((ref) {
   final taskRepository = ref.watch(taskRepositoryProvider);
   return TaskViewModel(taskRepository: taskRepository);
 });
 
+// タスクの ViewModel クラス
+// タスクの追加、削除、更新、Notion への同期を行う
 class TaskViewModel {
   final TaskRepository taskRepository;
   TaskViewModel({required this.taskRepository});
