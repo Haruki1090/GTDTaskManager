@@ -248,32 +248,26 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     builder: (context) {
                       return AlertDialog(
                         backgroundColor: Colors.white,
-                        title: const Text('ログアウトしますか？',
+                        title: const Text('本当にログアウトしますか？',
                             textAlign: TextAlign.left,
-                            style: TextStyle(fontSize: 20)),
+                            style: TextStyle(fontSize: 18)),
                         actions: [
                           TextButton(
                             onPressed: () {
                               Navigator.pop(context);
                             },
-                            child: Text('キャンセル',
-                                style: TextStyle(color: redColor)),
+                            child: Text('いいえ',
+                                style: TextStyle(
+                                    color: blueColor,
+                                    fontWeight: FontWeight.bold)),
                           ),
-                          Container(
-                            width: 100,
-                            height: 40,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(8),
-                              color: blueColor,
-                            ),
-                            child: TextButton(
-                              onPressed: () async {
-                                Navigator.pop(context);
-                                await authVM.signOut();
-                              },
-                              child: const Text('ログアウト',
-                                  style: TextStyle(color: Colors.white)),
-                            ),
+                          TextButton(
+                            onPressed: () async {
+                              Navigator.pop(context);
+                              await authVM.signOut();
+                            },
+                            child:
+                                Text('はい', style: TextStyle(color: redColor)),
                           ),
                         ],
                       );
@@ -286,6 +280,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         ),
         body: Container(
           color: Colors.white,
+          // タスク一覧の表示
+          // todo: 更新アクションの実装
+          // todo: 検索機能の実装
+          // todo: タスクのステータスによるフィルタリング機能の実装
           child: tasksAsync.when(
             data: (tasks) {
               if (tasks.isEmpty) {
