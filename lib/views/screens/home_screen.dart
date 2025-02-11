@@ -62,6 +62,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
+                          // todo: タスクのカラーを設定する機能の実装
+                          // todo: → データ構造の変更が必要
+
                           // todo: タスクの締め切り日を設定する機能の実装
                           IconButton(
                               icon: const Icon(Icons.calendar_today,
@@ -266,6 +269,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   // タスクリストのタイル
   Widget _buildTaskTile(Task task) {
+    // todo: inboxのタイルはtrailingのアイコンを別のものにする（ユーザーが任意に設定したステータスに変更できるボタン）
     return ListTile(
       title: Text(task.title),
       subtitle: (task.description != null && task.description!.isNotEmpty)
