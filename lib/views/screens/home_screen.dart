@@ -237,9 +237,17 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       children: [
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-          child: Text(
-            title,
-            style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          child: Row(
+            children: [
+              // todo: セクションのアイコンを設定する
+              Text(
+                title,
+                style:
+                    const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              ),
+              const Spacer(),
+              // todo: セクションのタスク数を表示する
+            ],
           ),
         ),
         if (tasks.isEmpty)
