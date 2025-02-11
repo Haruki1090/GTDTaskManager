@@ -231,6 +231,50 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     );
   }
 
+  Widget _buildTaskSection(String title, List<Task> tasks) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+          child: Text(
+            title,
+            style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          ),
+        ),
+        if (tasks.isEmpty)
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: const Text(
+              "タスクがありません。",
+              style: TextStyle(color: Colors.grey),
+            ),
+          ),
+        ...tasks.map((task) => _buildTaskTile(task)).toList(),
+        const Divider(), // セクション間の区切り
+      ],
+    );
+  }
+
+  // タスクリストのタイル
+  Widget _buildTaskTile(Task task) {
+    return ListTile(
+      title: Text(task.title),
+      subtitle: (task.description != null && task.description!.isNotEmpty)
+          ? Text(task.description!)
+          : null,
+      trailing: Icon(
+        task.status == TaskStatus.completed
+            ? Icons.check_circle
+            : Icons.radio_button_unchecked,
+        color: task.status == TaskStatus.completed ? Colors.green : null,
+      ),
+      onTap: () {
+        _showTaskDetailModal(task);
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     ref.read(authViewModelProvider);
@@ -327,39 +371,33 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         ),
         body: Container(
           color: Colors.white,
-          // タスク一覧の表示
-          // todo: 更新アクションの実装
-          // todo: 検索機能の実装
-          // todo: タスクのステータスによるフィルタリング機能の実装
           child: tasksAsync.when(
             data: (tasks) {
               if (tasks.isEmpty) {
                 return const Center(child: Text('タスクがありません。'));
               }
-              return ListView.builder(
-                itemCount: tasks.length,
-                itemBuilder: (context, index) {
-                  final task = tasks[index];
-                  return ListTile(
-                    title: Text(task.title),
-                    subtitle: (task.description != null &&
-                            task.description!.isNotEmpty)
-                        ? Text(task.description!)
-                        : null,
-                    trailing: Icon(
-                      task.status == TaskStatus.completed
-                          ? Icons.check_circle
-                          : Icons.radio_button_unchecked,
-                      color: task.status == TaskStatus.completed
-                          ? Colors.green
-                          : null,
-                    ),
-                    // BottomModalSheetでタスクの詳細を表示する
-                    onTap: () {
-                      _showTaskDetailModal(task);
-                    },
-                  );
-                },
+
+              // タスクをステータスごとに分類
+              final inboxTasks = tasks
+                  .where((task) => task.status == TaskStatus.inbox)
+                  .toList();
+              final nextActionTasks = tasks
+                  .where((task) => task.status == TaskStatus.nextAction)
+                  .toList();
+              final waitingTasks = tasks
+                  .where((task) => task.status == TaskStatus.waiting)
+                  .toList();
+              final somedayTasks = tasks
+                  .where((task) => task.status == TaskStatus.someday)
+                  .toList();
+
+              return ListView(
+                children: [
+                  _buildTaskSection('Inbox', inboxTasks),
+                  _buildTaskSection('Next Action', nextActionTasks),
+                  _buildTaskSection('Waiting', waitingTasks),
+                  _buildTaskSection('Someday', somedayTasks),
+                ],
               );
             },
             loading: () => const Center(child: CircularProgressIndicator()),
