@@ -30,7 +30,8 @@ mixin _$Task {
   String? get project => throw _privateConstructorUsedError; // プロジェクト
   String? get context =>
       throw _privateConstructorUsedError; // コンテキスト 例：Work, Homeなど
-  String? get userId => throw _privateConstructorUsedError;
+  String? get userId => throw _privateConstructorUsedError; // ユーザーID
+  int get taskColor => throw _privateConstructorUsedError;
 
   /// Serializes this Task to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -56,7 +57,8 @@ abstract class $TaskCopyWith<$Res> {
       DateTime? updatedAt,
       String? project,
       String? context,
-      String? userId});
+      String? userId,
+      int taskColor});
 }
 
 /// @nodoc
@@ -84,6 +86,7 @@ class _$TaskCopyWithImpl<$Res, $Val extends Task>
     Object? project = freezed,
     Object? context = freezed,
     Object? userId = freezed,
+    Object? taskColor = null,
   }) {
     return _then(_value.copyWith(
       id: freezed == id
@@ -126,6 +129,10 @@ class _$TaskCopyWithImpl<$Res, $Val extends Task>
           ? _value.userId
           : userId // ignore: cast_nullable_to_non_nullable
               as String?,
+      taskColor: null == taskColor
+          ? _value.taskColor
+          : taskColor // ignore: cast_nullable_to_non_nullable
+              as int,
     ) as $Val);
   }
 }
@@ -147,7 +154,8 @@ abstract class _$$TaskImplCopyWith<$Res> implements $TaskCopyWith<$Res> {
       DateTime? updatedAt,
       String? project,
       String? context,
-      String? userId});
+      String? userId,
+      int taskColor});
 }
 
 /// @nodoc
@@ -172,6 +180,7 @@ class __$$TaskImplCopyWithImpl<$Res>
     Object? project = freezed,
     Object? context = freezed,
     Object? userId = freezed,
+    Object? taskColor = null,
   }) {
     return _then(_$TaskImpl(
       id: freezed == id
@@ -214,6 +223,10 @@ class __$$TaskImplCopyWithImpl<$Res>
           ? _value.userId
           : userId // ignore: cast_nullable_to_non_nullable
               as String?,
+      taskColor: null == taskColor
+          ? _value.taskColor
+          : taskColor // ignore: cast_nullable_to_non_nullable
+              as int,
     ));
   }
 }
@@ -231,7 +244,8 @@ class _$TaskImpl implements _Task {
       this.updatedAt,
       this.project,
       this.context,
-      this.userId});
+      this.userId,
+      this.taskColor = 0xFF337EA9});
 
   factory _$TaskImpl.fromJson(Map<String, dynamic> json) =>
       _$$TaskImplFromJson(json);
@@ -265,10 +279,14 @@ class _$TaskImpl implements _Task {
 // コンテキスト 例：Work, Homeなど
   @override
   final String? userId;
+// ユーザーID
+  @override
+  @JsonKey()
+  final int taskColor;
 
   @override
   String toString() {
-    return 'Task(id: $id, title: $title, description: $description, status: $status, dueDate: $dueDate, createdAt: $createdAt, updatedAt: $updatedAt, project: $project, context: $context, userId: $userId)';
+    return 'Task(id: $id, title: $title, description: $description, status: $status, dueDate: $dueDate, createdAt: $createdAt, updatedAt: $updatedAt, project: $project, context: $context, userId: $userId, taskColor: $taskColor)';
   }
 
   @override
@@ -288,13 +306,15 @@ class _$TaskImpl implements _Task {
                 other.updatedAt == updatedAt) &&
             (identical(other.project, project) || other.project == project) &&
             (identical(other.context, context) || other.context == context) &&
-            (identical(other.userId, userId) || other.userId == userId));
+            (identical(other.userId, userId) || other.userId == userId) &&
+            (identical(other.taskColor, taskColor) ||
+                other.taskColor == taskColor));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, id, title, description, status,
-      dueDate, createdAt, updatedAt, project, context, userId);
+      dueDate, createdAt, updatedAt, project, context, userId, taskColor);
 
   /// Create a copy of Task
   /// with the given fields replaced by the non-null parameter values.
@@ -323,7 +343,8 @@ abstract class _Task implements Task {
       final DateTime? updatedAt,
       final String? project,
       final String? context,
-      final String? userId}) = _$TaskImpl;
+      final String? userId,
+      final int taskColor}) = _$TaskImpl;
 
   factory _Task.fromJson(Map<String, dynamic> json) = _$TaskImpl.fromJson;
 
@@ -346,7 +367,9 @@ abstract class _Task implements Task {
   @override
   String? get context; // コンテキスト 例：Work, Homeなど
   @override
-  String? get userId;
+  String? get userId; // ユーザーID
+  @override
+  int get taskColor;
 
   /// Create a copy of Task
   /// with the given fields replaced by the non-null parameter values.

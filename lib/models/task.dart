@@ -26,6 +26,7 @@ class Task with _$Task {
     String? project, // プロジェクト
     String? context, // コンテキスト 例：Work, Homeなど
     String? userId, // ユーザーID
+    @Default(0xFF337EA9) int taskColor, // タスクの色. デフォルトは青色(blueColor)
   }) = _Task;
 
   factory Task.fromJson(Map<String, dynamic> json) => _$TaskFromJson(json);

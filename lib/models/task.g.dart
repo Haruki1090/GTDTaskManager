@@ -24,6 +24,7 @@ _$TaskImpl _$$TaskImplFromJson(Map<String, dynamic> json) => _$TaskImpl(
       project: json['project'] as String?,
       context: json['context'] as String?,
       userId: json['userId'] as String?,
+      taskColor: (json['taskColor'] as num?)?.toInt() ?? 0xFF337EA9,
     );
 
 Map<String, dynamic> _$$TaskImplToJson(_$TaskImpl instance) =>
@@ -38,6 +39,7 @@ Map<String, dynamic> _$$TaskImplToJson(_$TaskImpl instance) =>
       'project': instance.project,
       'context': instance.context,
       'userId': instance.userId,
+      'taskColor': instance.taskColor,
     };
 
 const _$TaskStatusEnumMap = {
