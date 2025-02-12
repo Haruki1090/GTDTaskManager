@@ -366,6 +366,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                 ),
                               );
                               Navigator.of(context).pop();
+                              // テキストフィールドをクリア
+                              _taskTitleController.clear();
+                              _taskDescController.clear();
                             },
                           ),
                         ],
@@ -378,7 +381,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           ),
         );
       },
-    );
+    ).whenComplete(() {
+      // モーダルが閉じられた後にテキストフィールドをクリア
+      _taskTitleController.clear();
+      _taskDescController.clear();
+    });
   }
 
   // タスクセクション（ステータスごと）の構築
