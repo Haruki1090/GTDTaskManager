@@ -37,15 +37,15 @@ class NotionService {
                 }
               ]
             },
-          if (task.context != null)
+          if (task.label != null)
             "Context": {
               "rich_text": [
                 {
-                  "text": {"content": task.context}
+                  "text": {"content": task.label}
                 }
               ]
             },
-          if (task.context != null)
+          if (task.label != null)
             "Description": {
               "rich_text": [
                 {
@@ -102,15 +102,15 @@ class NotionService {
               }
             ]
           },
-        if (task.context != null)
+        if (task.label != null)
           "Context": {
             "rich_text": [
               {
-                "text": {"content": task.context}
+                "text": {"content": task.label}
               }
             ]
           },
-        if (task.context != null)
+        if (task.label != null)
           "Description": {
             "rich_text": [
               {
