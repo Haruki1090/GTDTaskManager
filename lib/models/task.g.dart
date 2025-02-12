@@ -22,7 +22,7 @@ _$TaskImpl _$$TaskImplFromJson(Map<String, dynamic> json) => _$TaskImpl(
           ? null
           : DateTime.parse(json['updatedAt'] as String),
       project: json['project'] as String?,
-      context: json['context'] as String?,
+      label: json['label'] as String?,
       userId: json['userId'] as String?,
       taskColor: (json['taskColor'] as num?)?.toInt() ?? 0xFF337EA9,
     );
@@ -37,7 +37,7 @@ Map<String, dynamic> _$$TaskImplToJson(_$TaskImpl instance) =>
       'createdAt': instance.createdAt?.toIso8601String(),
       'updatedAt': instance.updatedAt?.toIso8601String(),
       'project': instance.project,
-      'context': instance.context,
+      'label': instance.label,
       'userId': instance.userId,
       'taskColor': instance.taskColor,
     };
