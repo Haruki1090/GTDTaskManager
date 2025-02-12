@@ -280,6 +280,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   Widget _buildTaskTile(Task task) {
     // todo: inboxのタイルはtrailingのアイコンを別のものにする（ユーザーが任意に設定したステータスに変更できるボタン）
     return ListTile(
+      textColor: Color(task.taskColor),
       title: Text(task.title),
       subtitle: (task.description != null && task.description!.isNotEmpty)
           ? Text(task.description!)
