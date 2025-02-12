@@ -358,7 +358,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
           child: Row(
             children: [
-              // todo: セクションのアイコンを設定する
+              if (title == 'Inbox')
+                const Icon(Icons.inbox, color: Colors.grey, size: 22)
+              else if (title == 'Next Action')
+                const Icon(Icons.arrow_forward, color: Colors.grey, size: 22)
+              else if (title == 'Waiting')
+                const Icon(Icons.hourglass_empty, color: Colors.grey, size: 22)
+              else if (title == 'Someday')
+                const Icon(Icons.calendar_today, color: Colors.grey, size: 22),
+              const SizedBox(width: 8),
               Text(
                 title,
                 style:
