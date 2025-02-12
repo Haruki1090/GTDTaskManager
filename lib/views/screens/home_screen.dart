@@ -506,6 +506,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               ),
               Divider(),
               // todo: プロジェクト一覧の表示
+              const ListTile(
+                title: Text('プロジェクト', style: TextStyle(color: Colors.white)),
+                leading: Icon(Icons.folder, color: Colors.white),
+              ),
+              // todo: ラベル一覧の表示
+              const ListTile(
+                title: Text('ラベル', style: TextStyle(color: Colors.white)),
+                leading: Icon(Icons.label, color: Colors.white),
+              ),
             ],
           ),
         ),
