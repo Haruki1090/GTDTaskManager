@@ -71,6 +71,56 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             ),
                             onPressed: () {
                               // todo: タスクのカラーを設定する機能の実装
+                              showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return AlertDialog(
+                                    backgroundColor: Colors.white,
+                                    title: const Text('カラーを選択'),
+                                    content: Wrap(
+                                      children: notionColors
+                                          .map((color) => GestureDetector(
+                                                onTap: () {
+                                                  Navigator.pop(context, color);
+                                                },
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(8.0),
+                                                  child: Container(
+                                                      width: 50,
+                                                      height: 50,
+                                                      decoration: BoxDecoration(
+                                                        color: Color(color),
+                                                        shape: BoxShape.circle,
+                                                        border: color ==
+                                                                0xFF337EA9
+                                                            ? Border.all(
+                                                                color:
+                                                                    Colors.grey,
+                                                                width: 2)
+                                                            : null,
+                                                      ),
+                                                      // デフォルトカラーの場合は「デフォルト」と表示
+                                                      child: color == 0xFF337EA9
+                                                          ? const Center(
+                                                              child: Text(
+                                                                'デフォルト',
+                                                                style:
+                                                                    TextStyle(
+                                                                  color: Colors
+                                                                      .white,
+                                                                  fontSize: 8,
+                                                                ),
+                                                              ),
+                                                            )
+                                                          : null),
+                                                ),
+                                              ))
+                                          .toList(),
+                                    ),
+                                  );
+                                },
+                              );
                             },
                           ),
 
