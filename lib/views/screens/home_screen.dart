@@ -148,7 +148,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                       );
                                     });
                               }),
-                          // todo: タスクのステータスを設定する機能の実装
                           IconButton(
                             icon: const Icon(Icons.check_circle,
                                 color: Colors.white),
@@ -156,7 +155,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                               backgroundColor:
                                   WidgetStateProperty.all<Color>(greyColor),
                             ),
-                            onPressed: () {},
+                            onPressed: () {
+                              // todo: タスクのステータスを設定する機能の実装
+                            },
                           ),
                           // todo: タスクのプロジェクトを設定する機能の実装
                           IconButton(
