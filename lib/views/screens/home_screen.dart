@@ -156,6 +156,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                   WidgetStateProperty.all<Color>(greyColor),
                             ),
                             onPressed: () {
+                              // todo: [bug] 選択したステータスが反映されない.
                               showDialog(
                                 context: context,
                                 builder: (context) {
