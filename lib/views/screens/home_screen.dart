@@ -122,8 +122,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                               );
                             },
                           ),
-
-                          // todo: タスクの締め切り日を設定する機能の実装
                           IconButton(
                               icon: const Icon(Icons.calendar_today,
                                   color: Colors.white),
@@ -131,7 +129,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                 backgroundColor:
                                     WidgetStateProperty.all<Color>(greyColor),
                               ),
-                              onPressed: () {}),
+                              onPressed: () {
+                                // todo: タスクの締め切り日を設定する機能の実装
+                                showDatePicker(
+                                  context: context,
+                                  initialDate: DateTime.now(),
+                                  firstDate: DateTime.now(),
+                                  lastDate: DateTime(2100),
+                                );
+                              }),
                           // todo: タスクのステータスを設定する機能の実装
                           IconButton(
                             icon: const Icon(Icons.check_circle,
