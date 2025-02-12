@@ -221,7 +221,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                               }
                             },
                           ),
-                          // プロジェクト選択やコンテキスト選択は未実装（todo）
+                          // todo: プロジェクト選択やコンテキスト選択は未実装
                           IconButton(
                             icon: const Icon(Icons.folder, color: Colors.white),
                             style: ButtonStyle(
@@ -308,6 +308,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   // タスク詳細編集用のモーダルボトムシート
+  // todo: 編集画面を開いた後に新規タスク追加モーダルを開いた場合、コントローラーの値が残る問題を修正
   Future<void> _showTaskDetailModal(Task task) async {
     _taskTitleController.text = task.title;
     _taskDescController.text = task.description ?? '';
