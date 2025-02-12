@@ -365,7 +365,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
               const Spacer(),
-              // todo: セクションのタスク数を表示する
+              Text(
+                '${tasks.length} tasks',
+                style: const TextStyle(color: Colors.grey),
+              ),
             ],
           ),
         ),
