@@ -24,7 +24,7 @@ class Task with _$Task {
     DateTime? createdAt, // 作成日時
     DateTime? updatedAt, // 更新日時
     String? project, // プロジェクト
-    String? context, // コンテキスト 例：Work, Homeなど
+    String? label, // ラベル 例：Work, Homeなど
     String? userId, // ユーザーID
     @Default(0xFF337EA9) int taskColor, // タスクの色. デフォルトは青色(blueColor)
   }) = _Task;
