@@ -62,8 +62,17 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
-                          // todo: タスクのカラーを設定する機能の実装
-                          // todo: → データ構造の変更が必要
+                          IconButton(
+                            icon: const Icon(Icons.color_lens,
+                                color: Colors.white),
+                            style: ButtonStyle(
+                              backgroundColor:
+                                  WidgetStateProperty.all<Color>(greyColor),
+                            ),
+                            onPressed: () {
+                              // todo: タスクのカラーを設定する機能の実装
+                            },
+                          ),
 
                           // todo: タスクの締め切り日を設定する機能の実装
                           IconButton(
