@@ -70,7 +70,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                   WidgetStateProperty.all<Color>(greyColor),
                             ),
                             onPressed: () {
-                              // todo: タスクのカラーを設定する機能の実装
                               showDialog(
                                 context: context,
                                 builder: (context) {
