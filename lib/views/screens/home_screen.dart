@@ -131,7 +131,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                     WidgetStateProperty.all<Color>(greyColor),
                               ),
                               onPressed: () {
-                                // todo: タスクの締め切り日を設定する機能の実装
+                                // todo: [bug] 選択した日付が反映されない.
                                 showDatePicker(
                                     context: context,
                                     initialDate: DateTime.now(),
