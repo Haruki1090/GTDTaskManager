@@ -156,7 +156,47 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                   WidgetStateProperty.all<Color>(greyColor),
                             ),
                             onPressed: () {
-                              // todo: タスクのステータスを設定する機能の実装
+                              showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return AlertDialog(
+                                    backgroundColor: Colors.white,
+                                    title: const Text('ステータスを選択'),
+                                    content: Wrap(
+                                      children: [
+                                        ListTile(
+                                          title: const Text('Inbox'),
+                                          onTap: () {
+                                            Navigator.pop(
+                                                context, TaskStatus.inbox);
+                                          },
+                                        ),
+                                        ListTile(
+                                          title: const Text('Next Action'),
+                                          onTap: () {
+                                            Navigator.pop(
+                                                context, TaskStatus.nextAction);
+                                          },
+                                        ),
+                                        ListTile(
+                                          title: const Text('Waiting'),
+                                          onTap: () {
+                                            Navigator.pop(
+                                                context, TaskStatus.waiting);
+                                          },
+                                        ),
+                                        ListTile(
+                                          title: const Text('Someday'),
+                                          onTap: () {
+                                            Navigator.pop(
+                                                context, TaskStatus.someday);
+                                          },
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                },
+                              );
                             },
                           ),
                           // todo: タスクのプロジェクトを設定する機能の実装
