@@ -132,11 +132,20 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                               onPressed: () {
                                 // todo: タスクの締め切り日を設定する機能の実装
                                 showDatePicker(
-                                  context: context,
-                                  initialDate: DateTime.now(),
-                                  firstDate: DateTime.now(),
-                                  lastDate: DateTime(2100),
-                                );
+                                    context: context,
+                                    initialDate: DateTime.now(),
+                                    firstDate: DateTime.now(),
+                                    lastDate: DateTime(2100),
+                                    builder: (context, child) {
+                                      return Theme(
+                                        data: ThemeData.light().copyWith(
+                                          colorScheme: ColorScheme.light(
+                                            primary: blueColor,
+                                          ),
+                                        ),
+                                        child: child!,
+                                      );
+                                    });
                               }),
                           // todo: タスクのステータスを設定する機能の実装
                           IconButton(
