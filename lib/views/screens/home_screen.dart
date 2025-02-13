@@ -10,6 +10,12 @@ import 'package:gtd_task_manager/views/screens/account_settings_screen.dart';
 import 'package:gtd_task_manager/views/screens/settings_screen.dart';
 import 'package:gtd_task_manager/views/widgets/glass_app_bar.dart';
 
+// Provider
+final selectedColorProvider = StateProvider<int>((ref) => 0xFF337EA9);
+final selectedDateProvider = StateProvider<DateTime?>((ref) => null);
+final selectedStatusProvider =
+    StateProvider<TaskStatus>((ref) => TaskStatus.inbox);
+
 class HomeScreen extends ConsumerStatefulWidget {
   final String uid;
   const HomeScreen({super.key, required this.uid});
@@ -21,11 +27,6 @@ class HomeScreen extends ConsumerStatefulWidget {
 class _HomeScreenState extends ConsumerState<HomeScreen> {
   final TextEditingController _taskTitleController = TextEditingController();
   final TextEditingController _taskDescController = TextEditingController();
-
-  // 選択値用の state 変数
-  int _selectedColor = 0xFF337EA9;
-  DateTime? _selectedDate;
-  TaskStatus _selectedStatus = TaskStatus.inbox;
 
   @override
   void dispose() {
@@ -44,6 +45,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         borderRadius: BorderRadius.vertical(top: Radius.circular(8)),
       ),
       builder: (context) {
+        // ConsumerWidgetでなく、親のrefを利用するために、外側のrefをキャプチャ
         return Padding(
           padding: MediaQuery.of(context).viewInsets, // キーボード分の余白
           child: Container(
@@ -75,7 +77,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                 color: Colors.white),
                             style: ButtonStyle(
                               backgroundColor: WidgetStateProperty.all<Color>(
-                                  Color(_selectedColor)),
+                                Color(ref.watch(selectedColorProvider)),
+                              ),
                             ),
                             onPressed: () async {
                               final selectedColor = await showDialog<int>(
@@ -98,7 +101,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                               decoration: BoxDecoration(
                                                 color: Color(color),
                                                 shape: BoxShape.circle,
-                                                border: color == _selectedColor
+                                                border: color ==
+                                                        ref.read(
+                                                            selectedColorProvider)
                                                     ? Border.all(
                                                         color: Colors.grey,
                                                         width: 2)
@@ -125,9 +130,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                 },
                               );
                               if (selectedColor != null) {
-                                setState(() {
-                                  _selectedColor = selectedColor;
-                                });
+                                ref.read(selectedColorProvider.notifier).state =
+                                    selectedColor;
                               }
                             },
                           ),
@@ -157,9 +161,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                 },
                               );
                               if (pickedDate != null) {
-                                setState(() {
-                                  _selectedDate = pickedDate;
-                                });
+                                ref.read(selectedDateProvider.notifier).state =
+                                    pickedDate;
                               }
                             },
                           ),
@@ -215,9 +218,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                 },
                               );
                               if (selectedStatus != null) {
-                                setState(() {
-                                  _selectedStatus = selectedStatus;
-                                });
+                                ref
+                                    .read(selectedStatusProvider.notifier)
+                                    .state = selectedStatus;
                               }
                             },
                           ),
@@ -260,9 +263,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                 createdAt: DateTime.now(),
                                 updatedAt: DateTime.now(),
                                 userId: widget.uid,
-                                status: _selectedStatus, // 選択したステータスを反映
-                                dueDate: _selectedDate, // 選択した日付を反映
-                                taskColor: _selectedColor, // 選択したカラーを反映
+                                status: ref.read(selectedStatusProvider),
+                                dueDate: ref.read(selectedDateProvider),
+                                taskColor: ref.read(selectedColorProvider),
                               );
                               // Firebase にタスク追加
                               final taskVM = ref.read(taskViewModelProvider);
@@ -285,11 +288,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                               _taskTitleController.clear();
                               _taskDescController.clear();
                               // 選択状態のリセット
-                              setState(() {
-                                _selectedColor = 0xFF337EA9;
-                                _selectedDate = null;
-                                _selectedStatus = TaskStatus.inbox;
-                              });
+                              ref.read(selectedColorProvider.notifier).state =
+                                  0xFF337EA9;
+                              ref.read(selectedDateProvider.notifier).state =
+                                  null;
+                              ref.read(selectedStatusProvider.notifier).state =
+                                  TaskStatus.inbox;
                               Navigator.of(context).pop();
                             },
                           ),
@@ -311,6 +315,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   Future<void> _showTaskDetailModal(Task task) async {
     _taskTitleController.text = task.title;
     _taskDescController.text = task.description ?? '';
+    // 編集前にProviderの状態を更新（初期値としてタスクの値をセット）
+    ref.read(selectedColorProvider.notifier).state = task.taskColor;
+    ref.read(selectedDateProvider.notifier).state = task.dueDate;
+    ref.read(selectedStatusProvider.notifier).state = task.status;
+
     await showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -361,7 +370,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                 style: ButtonStyle(
                                   backgroundColor:
                                       WidgetStateProperty.all<Color>(
-                                          Color(_selectedColor)),
+                                    Color(ref.watch(selectedColorProvider)),
+                                  ),
                                 ),
                                 onPressed: () async {
                                   final selectedColor = await showDialog<int>(
@@ -386,7 +396,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                                     color: Color(color),
                                                     shape: BoxShape.circle,
                                                     border: color ==
-                                                            _selectedColor
+                                                            ref.read(
+                                                                selectedColorProvider)
                                                         ? Border.all(
                                                             color: Colors.grey,
                                                             width: 2)
@@ -413,11 +424,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                       );
                                     },
                                   );
-                                  // todo: Provider で管理する（新規追加も）
                                   if (selectedColor != null) {
-                                    setState(() {
-                                      _selectedColor = selectedColor;
-                                    });
+                                    ref
+                                        .read(selectedColorProvider.notifier)
+                                        .state = selectedColor;
                                   }
                                 },
                               ),
@@ -447,9 +457,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                     },
                                   );
                                   if (pickedDate != null) {
-                                    setState(() {
-                                      _selectedDate = pickedDate;
-                                    });
+                                    ref
+                                        .read(selectedDateProvider.notifier)
+                                        .state = pickedDate;
                                   }
                                 },
                               ),
@@ -505,9 +515,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                     },
                                   );
                                   if (selectedStatus != null) {
-                                    setState(() {
-                                      _selectedStatus = selectedStatus;
-                                    });
+                                    ref
+                                        .read(selectedStatusProvider.notifier)
+                                        .state = selectedStatus;
                                   }
                                 },
                               ),
@@ -555,9 +565,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                     createdAt: DateTime.now(),
                                     updatedAt: DateTime.now(),
                                     userId: widget.uid,
-                                    status: _selectedStatus, // 選択したステータスを反映
-                                    dueDate: _selectedDate, // 選択した日付を反映
-                                    taskColor: _selectedColor, // 選択したカラーを反映
+                                    status: ref.read(selectedStatusProvider),
+                                    dueDate: ref.read(selectedDateProvider),
+                                    taskColor: ref.read(selectedColorProvider),
                                   );
                                   // Firebase にタスク追加
                                   final taskVM =
@@ -583,11 +593,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                   _taskTitleController.clear();
                                   _taskDescController.clear();
                                   // 選択状態のリセット
-                                  setState(() {
-                                    _selectedColor = 0xFF337EA9;
-                                    _selectedDate = null;
-                                    _selectedStatus = TaskStatus.inbox;
-                                  });
+                                  ref
+                                      .read(selectedColorProvider.notifier)
+                                      .state = 0xFF337EA9;
+                                  ref
+                                      .read(selectedDateProvider.notifier)
+                                      .state = null;
+                                  ref
+                                      .read(selectedStatusProvider.notifier)
+                                      .state = TaskStatus.inbox;
                                   Navigator.of(context).pop();
                                 },
                               ),
@@ -609,9 +623,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       taskVM.updateTask(task.copyWith(
         title: _taskTitleController.text,
         description: _taskDescController.text,
-        taskColor: _selectedColor,
-        dueDate: _selectedDate,
-        status: _selectedStatus,
+        taskColor: ref.read(selectedColorProvider),
+        dueDate: ref.read(selectedDateProvider),
+        status: ref.read(selectedStatusProvider),
         updatedAt: DateTime.now(),
       ));
 
@@ -740,10 +754,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                           onPressed: () {
                             Navigator.pop(context);
                           },
-                          child: Text('いいえ',
-                              style: TextStyle(
-                                  color: blueColor,
-                                  fontWeight: FontWeight.bold)),
+                          child: Text(
+                            'いいえ',
+                            style: TextStyle(
+                                color: blueColor, fontWeight: FontWeight.bold),
+                          ),
                         ),
                         TextButton(
                           onPressed: () async {
