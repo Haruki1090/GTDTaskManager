@@ -651,7 +651,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               else if (title == 'Waiting')
                 const Icon(Icons.hourglass_empty, color: Colors.grey, size: 22)
               else if (title == 'Someday')
-                const Icon(Icons.calendar_today, color: Colors.grey, size: 22),
+                const Icon(Icons.calendar_today, color: Colors.grey, size: 22)
+              else if (title == 'Completed')
+                const Icon(Icons.check_circle, color: Colors.grey, size: 22),
               const SizedBox(width: 8),
               Text(
                 title,
@@ -814,6 +816,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             final somedayTasks = tasks
                 .where((task) => task.status == TaskStatus.someday)
                 .toList();
+            final completedTasks = tasks
+                .where((task) => task.status == TaskStatus.completed)
+                .toList();
 
             return ListView(
               children: [
@@ -821,6 +826,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 _buildTaskSection('Next Action', nextActionTasks),
                 _buildTaskSection('Waiting', waitingTasks),
                 _buildTaskSection('Someday', somedayTasks),
+                _buildTaskSection('Completed', completedTasks),
               ],
             );
           },
