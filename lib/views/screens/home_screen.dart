@@ -308,7 +308,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   // タスク詳細編集用のモーダルボトムシート
-  // todo: タスク（タイトル・詳細以外）を編集できるようにする
   Future<void> _showTaskDetailModal(Task task) async {
     _taskTitleController.text = task.title;
     _taskDescController.text = task.description ?? '';
@@ -350,27 +349,250 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
-                          IconButton(
-                            icon: const Icon(Icons.send, color: Colors.white),
-                            style: ButtonStyle(
-                              backgroundColor:
-                                  WidgetStateProperty.all<Color>(blueColor),
-                            ),
-                            onPressed: () async {
-                              final taskVM = ref.read(taskViewModelProvider);
-                              // 更新時は、タイトル・詳細のみ更新（必要に応じて他のプロパティも更新可）
-                              await taskVM.updateTask(
-                                task.copyWith(
-                                  title: _taskTitleController.text.trim(),
-                                  description: _taskDescController.text.trim(),
+                          const SizedBox(height: 24),
+                          // 下段：各種選択ボタン
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              // カラー選択ボタン
+                              IconButton(
+                                icon: const Icon(Icons.color_lens,
+                                    color: Colors.white),
+                                style: ButtonStyle(
+                                  backgroundColor:
+                                      WidgetStateProperty.all<Color>(
+                                          Color(_selectedColor)),
                                 ),
-                              );
-                              Navigator.of(context).pop();
-                              // テキストフィールドをクリア
-                              _taskTitleController.clear();
-                              _taskDescController.clear();
-                            },
+                                onPressed: () async {
+                                  final selectedColor = await showDialog<int>(
+                                    context: context,
+                                    builder: (context) {
+                                      return AlertDialog(
+                                        backgroundColor: Colors.white,
+                                        title: const Text('カラーを選択'),
+                                        content: Wrap(
+                                          children: notionColors.map((color) {
+                                            return GestureDetector(
+                                              onTap: () {
+                                                Navigator.pop(context, color);
+                                              },
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: Container(
+                                                  width: 50,
+                                                  height: 50,
+                                                  decoration: BoxDecoration(
+                                                    color: Color(color),
+                                                    shape: BoxShape.circle,
+                                                    border: color ==
+                                                            _selectedColor
+                                                        ? Border.all(
+                                                            color: Colors.grey,
+                                                            width: 2)
+                                                        : null,
+                                                  ),
+                                                  // デフォルトカラーの場合は「デフォルト」と表示
+                                                  child: color == 0xFF337EA9
+                                                      ? const Center(
+                                                          child: Text(
+                                                            'デフォルト',
+                                                            style: TextStyle(
+                                                              color:
+                                                                  Colors.white,
+                                                              fontSize: 8,
+                                                            ),
+                                                          ),
+                                                        )
+                                                      : null,
+                                                ),
+                                              ),
+                                            );
+                                          }).toList(),
+                                        ),
+                                      );
+                                    },
+                                  );
+                                  if (selectedColor != null) {
+                                    setState(() {
+                                      _selectedColor = selectedColor;
+                                    });
+                                  }
+                                },
+                              ),
+                              // 日付選択ボタン
+                              IconButton(
+                                icon: const Icon(Icons.calendar_today,
+                                    color: Colors.white),
+                                style: ButtonStyle(
+                                  backgroundColor:
+                                      WidgetStateProperty.all<Color>(greyColor),
+                                ),
+                                onPressed: () async {
+                                  final pickedDate = await showDatePicker(
+                                    context: context,
+                                    initialDate: DateTime.now(),
+                                    firstDate: DateTime.now(),
+                                    lastDate: DateTime(2100),
+                                    builder: (context, child) {
+                                      return Theme(
+                                        data: ThemeData.light().copyWith(
+                                          colorScheme: ColorScheme.light(
+                                            primary: blueColor,
+                                          ),
+                                        ),
+                                        child: child!,
+                                      );
+                                    },
+                                  );
+                                  if (pickedDate != null) {
+                                    setState(() {
+                                      _selectedDate = pickedDate;
+                                    });
+                                  }
+                                },
+                              ),
+                              // ステータス選択ボタン
+                              IconButton(
+                                icon: const Icon(Icons.check_circle,
+                                    color: Colors.white),
+                                style: ButtonStyle(
+                                  backgroundColor:
+                                      WidgetStateProperty.all<Color>(greyColor),
+                                ),
+                                onPressed: () async {
+                                  final selectedStatus =
+                                      await showDialog<TaskStatus>(
+                                    context: context,
+                                    builder: (context) {
+                                      return AlertDialog(
+                                        backgroundColor: Colors.white,
+                                        title: const Text('ステータスを選択'),
+                                        content: Wrap(
+                                          children: [
+                                            ListTile(
+                                              title: const Text('Inbox'),
+                                              onTap: () {
+                                                Navigator.pop(
+                                                    context, TaskStatus.inbox);
+                                              },
+                                            ),
+                                            ListTile(
+                                              title: const Text('Next Action'),
+                                              onTap: () {
+                                                Navigator.pop(context,
+                                                    TaskStatus.nextAction);
+                                              },
+                                            ),
+                                            ListTile(
+                                              title: const Text('Waiting'),
+                                              onTap: () {
+                                                Navigator.pop(context,
+                                                    TaskStatus.waiting);
+                                              },
+                                            ),
+                                            ListTile(
+                                              title: const Text('Someday'),
+                                              onTap: () {
+                                                Navigator.pop(context,
+                                                    TaskStatus.someday);
+                                              },
+                                            ),
+                                          ],
+                                        ),
+                                      );
+                                    },
+                                  );
+                                  if (selectedStatus != null) {
+                                    setState(() {
+                                      _selectedStatus = selectedStatus;
+                                    });
+                                  }
+                                },
+                              ),
+                              // todo: プロジェクト選択やコンテキスト選択は未実装
+                              IconButton(
+                                icon: const Icon(Icons.folder,
+                                    color: Colors.white),
+                                style: ButtonStyle(
+                                  backgroundColor:
+                                      WidgetStateProperty.all<Color>(greyColor),
+                                ),
+                                onPressed: () {},
+                              ),
+                              IconButton(
+                                icon: const Icon(Icons.label,
+                                    color: Colors.white),
+                                style: ButtonStyle(
+                                  backgroundColor:
+                                      WidgetStateProperty.all<Color>(greyColor),
+                                ),
+                                onPressed: () {},
+                              ),
+                              // 追加送信ボタン
+                              IconButton(
+                                icon:
+                                    const Icon(Icons.send, color: Colors.white),
+                                style: ButtonStyle(
+                                  backgroundColor:
+                                      WidgetStateProperty.all<Color>(blueColor),
+                                ),
+                                onPressed: () async {
+                                  final title =
+                                      _taskTitleController.text.trim();
+                                  final desc = _taskDescController.text.trim();
+                                  if (title.isEmpty) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                          content: Text('タイトルは必須です。')),
+                                    );
+                                    return;
+                                  }
+                                  final newTask = Task(
+                                    title: title,
+                                    description: desc,
+                                    createdAt: DateTime.now(),
+                                    updatedAt: DateTime.now(),
+                                    userId: widget.uid,
+                                    status: _selectedStatus, // 選択したステータスを反映
+                                    dueDate: _selectedDate, // 選択した日付を反映
+                                    taskColor: _selectedColor, // 選択したカラーを反映
+                                  );
+                                  // Firebase にタスク追加
+                                  final taskVM =
+                                      ref.read(taskViewModelProvider);
+                                  await taskVM.addTask(newTask);
+                                  // Notion 連携している場合は Notion にも追加
+                                  final notionVM =
+                                      ref.read(notionViewModelProvider);
+                                  final notionAccount =
+                                      notionVM.currentNotionAccount;
+                                  if (notionAccount != null) {
+                                    try {
+                                      await NotionService.addTask(
+                                          notionAccount, newTask);
+                                    } catch (e) {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        SnackBar(
+                                            content: Text('Notion同期失敗: $e')),
+                                      );
+                                    }
+                                  }
+                                  _taskTitleController.clear();
+                                  _taskDescController.clear();
+                                  // 選択状態のリセット
+                                  setState(() {
+                                    _selectedColor = 0xFF337EA9;
+                                    _selectedDate = null;
+                                    _selectedStatus = TaskStatus.inbox;
+                                  });
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                            ],
                           ),
+                          const SizedBox(height: 100),
                         ],
                       ),
                     ],
