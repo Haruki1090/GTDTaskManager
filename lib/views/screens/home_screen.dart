@@ -35,7 +35,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   // 新規タスク追加モーダル（モーダルボトムシート）
-  // todo: 選択中のカラーはボタンの色で表示
   Future<void> _showAddTaskModal() async {
     await showModalBottomSheet(
       context: context,
@@ -75,8 +74,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             icon: const Icon(Icons.color_lens,
                                 color: Colors.white),
                             style: ButtonStyle(
-                              backgroundColor:
-                                  WidgetStateProperty.all<Color>(greyColor),
+                              backgroundColor: WidgetStateProperty.all<Color>(
+                                  Color(_selectedColor)),
                             ),
                             onPressed: () async {
                               final selectedColor = await showDialog<int>(
