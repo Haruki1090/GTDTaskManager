@@ -684,31 +684,43 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   // タスクリストのタイル
   Widget _buildTaskTile(Task task) {
-    return ListTile(
-      textColor: Color(task.taskColor),
-      title: Text(task.title),
-      subtitle: (task.description != null && task.description!.isNotEmpty)
-          ? Text(task.description!)
-          : null,
-      trailing: IconButton(
-        icon: Icon(
-          task.status == TaskStatus.completed
-              ? Icons.check_circle
-              : Icons.radio_button_unchecked,
-          color: task.status == TaskStatus.completed ? Colors.green : null,
+    // Dismissible でタスク削除
+    return Dismissible(
+      key: Key(task.id!),
+      onDismissed: (direction) {
+        final taskVM = ref.read(taskViewModelProvider);
+        taskVM.deleteTask(task.id!);
+      },
+      background: Container(
+        color: Colors.red,
+        child: const Icon(Icons.delete, color: Colors.white),
+      ),
+      child: ListTile(
+        textColor: Color(task.taskColor),
+        title: Text(task.title),
+        subtitle: (task.description != null && task.description!.isNotEmpty)
+            ? Text(task.description!)
+            : null,
+        trailing: IconButton(
+          icon: Icon(
+            task.status == TaskStatus.completed
+                ? Icons.check_circle
+                : Icons.radio_button_unchecked,
+            color: task.status == TaskStatus.completed ? Colors.green : null,
+          ),
+          onPressed: () {
+            final taskVM = ref.read(taskViewModelProvider);
+            taskVM.updateTask(task.copyWith(
+              status: task.status == TaskStatus.completed
+                  ? TaskStatus.inbox
+                  : TaskStatus.completed,
+            ));
+          },
         ),
-        onPressed: () {
-          final taskVM = ref.read(taskViewModelProvider);
-          taskVM.updateTask(task.copyWith(
-            status: task.status == TaskStatus.completed
-                ? TaskStatus.inbox
-                : TaskStatus.completed,
-          ));
+        onTap: () {
+          _showTaskDetailModal(task);
         },
       ),
-      onTap: () {
-        _showTaskDetailModal(task);
-      },
     );
   }
 
