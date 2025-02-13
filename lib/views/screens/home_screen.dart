@@ -414,6 +414,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                       );
                                     },
                                   );
+                                  // todo: Provider で管理する（新規追加も）
                                   if (selectedColor != null) {
                                     setState(() {
                                       _selectedColor = selectedColor;
