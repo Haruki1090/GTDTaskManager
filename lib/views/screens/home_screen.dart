@@ -681,7 +681,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   // タスクリストのタイル
-  // todo: 完了ヴボタンの実装
   Widget _buildTaskTile(Task task) {
     return ListTile(
       textColor: Color(task.taskColor),
@@ -689,11 +688,21 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       subtitle: (task.description != null && task.description!.isNotEmpty)
           ? Text(task.description!)
           : null,
-      trailing: Icon(
-        task.status == TaskStatus.completed
-            ? Icons.check_circle
-            : Icons.radio_button_unchecked,
-        color: task.status == TaskStatus.completed ? Colors.green : null,
+      trailing: IconButton(
+        icon: Icon(
+          task.status == TaskStatus.completed
+              ? Icons.check_circle
+              : Icons.radio_button_unchecked,
+          color: task.status == TaskStatus.completed ? Colors.green : null,
+        ),
+        onPressed: () {
+          final taskVM = ref.read(taskViewModelProvider);
+          taskVM.updateTask(task.copyWith(
+            status: task.status == TaskStatus.completed
+                ? TaskStatus.inbox
+                : TaskStatus.completed,
+          ));
+        },
       ),
       onTap: () {
         _showTaskDetailModal(task);
