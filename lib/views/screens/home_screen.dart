@@ -308,7 +308,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   // タスク詳細編集用のモーダルボトムシート
-  // todo: [bug]カラーが変更されない
+  // todo: [bug]updateされない
   Future<void> _showTaskDetailModal(Task task) async {
     _taskTitleController.text = task.title;
     _taskDescController.text = task.description ?? '';
