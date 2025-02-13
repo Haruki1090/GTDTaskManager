@@ -606,6 +606,17 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         );
       },
     ).whenComplete(() {
+      // todo: モーダルが閉じた後に更新処理を実行
+      final taskVM = ref.read(taskViewModelProvider);
+      taskVM.updateTask(task.copyWith(
+        title: _taskTitleController.text,
+        description: _taskDescController.text,
+        taskColor: _selectedColor,
+        dueDate: _selectedDate,
+        status: _selectedStatus,
+        updatedAt: DateTime.now(),
+      ));
+
       // モーダルが閉じられた後にテキストフィールドをクリア
       _taskTitleController.clear();
       _taskDescController.clear();
