@@ -685,6 +685,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   // タスクリストのタイル
   Widget _buildTaskTile(Task task) {
     // Dismissible でタスク削除
+    // todo: タスク削除時にNotionも同期する
+    // todo: タスク削除時にSnackBarで削除完了を表示
+    // todo: Dismissible の background のアイコンの位置を調整
+    // todo: Dismissible の 可動域を調整
     return Dismissible(
       key: Key(task.id!),
       onDismissed: (direction) {
