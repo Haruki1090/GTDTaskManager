@@ -308,7 +308,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   // タスク詳細編集用のモーダルボトムシート
-  // todo: 編集画面を開いた後に新規タスク追加モーダルを開いた場合、コントローラーの値が残る問題を修正
+  // todo: タスク（タイトル・詳細以外）を編集できるようにする
   Future<void> _showTaskDetailModal(Task task) async {
     _taskTitleController.text = task.title;
     _taskDescController.text = task.description ?? '';
